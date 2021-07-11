@@ -1,10 +1,13 @@
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
-const peer = new Peer(undefined, {
-  //path: '/peerjs',  
-  host: '/',
-  port: '443'
-})
+// const peer = new Peer(undefined, {
+//   //path: '/peerjs',  
+//   host: '/',
+//   port: '443'
+// })
+
+let peer = new Peer({host:'peerjs-server.herokuapp.com', secure:true, port:443})
+
 
 
 // Creating the <video> tag and muting the audio of your own feed

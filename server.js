@@ -28,9 +28,8 @@ const mongoose = require('mongoose');
 
 const dotenv = require('dotenv')
 dotenv.config()
-//const connectionString = "mongodb+srv://shrutigupta:04112000@cluster0.c33lp.mongodb.net/clone?retryWrites=true&w=majority"
 
-mongoose.connect(process.env.CONNECTIONSTRING, {
+mongoose.connect(process.env.MONGODB_URI || process.env.CONNECTIONSTRING, {
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true
