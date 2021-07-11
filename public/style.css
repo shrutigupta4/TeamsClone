@@ -1,0 +1,167 @@
+.main {
+    height: 100vh;
+    display: flex;
+}
+
+.main__left {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    float: left;
+}
+
+.main__videos {
+    flex-grow: 1;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.chat_box {
+    flex: 0.2;
+    display: flex;
+    flex-direction: column;
+}
+
+.main__header {
+    padding-top: 5px;
+    color: black;
+    text-align: center;
+}
+
+.main__inner_window {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+ul{
+    padding: 10px;
+    padding-top: 0px;
+}
+
+.messages{
+    margin: 1px;
+    color: black;
+    list-style: none;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.message{
+    background-color: #e5e5f1;
+    padding: 5px;
+    margin: 5px;
+    
+}
+
+.main__message_container {
+    padding: 22px 12px;
+    display: flex;
+}
+
+.main__message_container input {
+    flex-grow: 1;
+    background-color: transparent;
+    border: none;
+    color: black;
+}
+
+
+
+.participant_box{
+    
+    flex: 0.2;
+    display: flex;
+    flex-direction: column;
+    display: none;
+}
+
+.list{
+    margin: 1px;
+    color: black;
+    list-style: none;
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+
+.dp {
+	position: relative;
+	width: 100px;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.profileName{
+    font-size: 24px;
+}
+
+
+
+
+
+/* ---------------------------- */
+
+.main__controls {
+    background-color: #1C1E20;
+    position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 80%;
+   /* background-color:blue; */
+   color: white;
+   text-align: center;
+    /* position: fixed; */
+    display: flex;
+    flex: 0.8;
+    /* justify-content: space-between; */
+    padding: 5px;
+}
+
+
+
+/* .main__controls {
+    color: #D2D2D2;
+    
+} */
+
+.main__controls__block {
+    display: flex;
+}
+
+.main__controls__button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 23%;
+    min-width: 80px;
+    cursor: pointer;
+}
+
+.main__controls__button:hover {
+    background-color: #343434;
+    border-radius: 5px;
+}
+
+.main__controls__button i {
+    font-size: 24px;
+}
+
+
+
+
+
+
+
+
+
+
+.leave_meeting {
+    color: #EB534B;
+}
+
+.unmute, .stop {
+    color: #CC3B33;
+}
