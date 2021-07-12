@@ -1,14 +1,6 @@
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
-// const peer = new Peer(undefined, {
-//   //path: '/peerjs',  
-//   host: '/',
-//   port: '443'
-// })
-
-let peer = new Peer({host:'peerjs-server.herokuapp.com', secure:true, port:443})
-
-
+const peer = new Peer()
 
 // Creating the <video> tag and muting the audio of your own feed
 let userMediaStream;
@@ -17,7 +9,7 @@ userMedia.muted = true
 
 const peers = {} //
 
-
+console.log("hello")
 navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
@@ -242,3 +234,4 @@ const setStopVideo = () => {
     //endCall()
     window.location.href = "http://google.com"; 
   }
+  
