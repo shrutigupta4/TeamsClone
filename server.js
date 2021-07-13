@@ -1,8 +1,5 @@
 const express = require('express')
-//const path = require('path'); //check for path/peerserver thing, from smwhere else
 const app = express()
-// const cors = require('cors')
-// app.use(cors())
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
@@ -52,32 +49,28 @@ app.use(express.static('public'))
 app.use(express.json()); //to send json from frontend to backend
 app.use(cookieParser()); 
 
+
+//Routes
 app.get('/', (req, res) => {
   res.render('login');
 })
-
-
 
 app.get('/login', (req, res)=>{
   res.render('login')
 })
 
-
 app.post('/login', (req, res)=>{
   let token = req.body.token; //google token sent on login from frontend
-  console.log(token);
+
   async function verify() {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-        // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        audience: CLIENT_ID,  //the CLIENT_ID of the app that accesses the backend
     });
     const payload = ticket.getPayload();
     const userid = payload['sub'];
     // If request specified a G Suite domain:
     // const domain = payload['hd'];
-    console.log(payload)
   }
   verify()
   .then(()=>{
@@ -88,8 +81,10 @@ app.post('/login', (req, res)=>{
 
 app.get('/dashboard', checkAuthenticated, (req, res)=>{
   let user = req.user;
-  res.render('dashboard', {user})
+    roomId = user.email;
+  res.render('dashboard', {roomId, user});
 })
+
 
 
 app.get('/logout', (req, res)=>{
@@ -134,8 +129,17 @@ function checkAuthenticated(req, res, next){
 }
 
 io.on('connection', socket => {
+  
   socket.on('join-room', (roomId, userId, userName) => {
     socket.join(roomId)
+
+    //to send a user's rooms to dashboard
+    async function sendRooms(){
+      const resultss = await db.collection("users").find({useremail: userId}).toArray();
+          io.to(socket.id).emit('showRoomIds', resultss)
+    }sendRooms().catch(console.error)
+
+    //load messages of the given room
     async function getMessages() {
       const results = await db.collection("messages").find({room: roomId}).toArray();
       io.to(socket.id).emit('createMessage', results)
@@ -156,36 +160,33 @@ io.on('connection', socket => {
     
 
     socket.broadcast.to(roomId).emit('user-connected', userId)
-    socket.broadcast.to(roomId).emit('addToParticipants', userName)
+    socket.broadcast.to(roomId).emit('addToParticipants', userName) //to add to participants list
     
 
     socket.on('disconnect', () => {
       socket.broadcast.to(roomId).emit('user-disconnected', userId)
       delete roomsMap[roomId][userId]
-      console.log(roomsMap[roomId])
     })
+
     socket.on('message', message => {
       //send message to the same room
-
       const messagedb = new Message({
         room: roomId,
         user: userName,
        message_body: message,
        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: "2-digit" })
      });
-     messagedb.save();
+     messagedb.save(); //updating on the database
 
       io.to(roomId).emit('createMessage', {messagedb});
       
     }); 
   })
   socket.on('count', roomId =>{
-    io.to(socket.id).emit('peerss', roomsMap[roomId])
+    io.to(socket.id).emit('peerss', roomsMap[roomId]) //names of peers sent to clients
   })
 });
 
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.info('Server is running on port', `${port}`))
-
-//peerjs --port 443 --key peerjs --path /peerjs
